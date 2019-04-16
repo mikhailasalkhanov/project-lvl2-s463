@@ -2,6 +2,6 @@
 
 
 ### Instalation
-`npm install gendiff-asalkhanov`
+`npm install -g gendiff-asalkhanov`
 
 [![asciicast](https://asciinema.org/a/hiuJ22Z25tOYGBglNrAdUrAGM.svg)](https://asciinema.org/a/hiuJ22Z25tOYGBglNrAdUrAGM)
