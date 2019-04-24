@@ -18,7 +18,7 @@ const genDiff = (beforeFilePath, afterFilePath) => {
     }
     return [...acc, `  + ${key}: ${after[key]}`, `  - ${key}: ${before[key]}`];
   }, []);
-  
+
   return ['{', ...result, '}'].join('\n');
 };
 

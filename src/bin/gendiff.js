@@ -1,8 +1,7 @@
 #! /usr/bin/env node
 import commander from 'commander';
 import { version } from '../../package.json';
-import { readFileSync } from 'fs';
-import genDiff from '../';
+import genDiff from '..';
 
 const program = commander;
 
