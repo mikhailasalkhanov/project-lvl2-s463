@@ -1,6 +1,6 @@
 {
   "name": "gendiff-asalkhanov",
-  "version": "2.0.9",
+  "version": "2.1.9",
   "description": "cli app for search differences in config files",
   "main": "index.js",
   "bin": {
@@ -10,7 +10,8 @@
     "dist"
   ],
   "scripts": {
-    "test": "jest --watch",
+    "test": "jest",
+    "watch": "jest --watch",
     "build": "NODE_ENV=production babel src --out-dir dist --source-map inline",
     "prepublishOnly": "npm run build"
   },

@@ -12,4 +12,6 @@ start:
 
 test:
 	npm run test
-	
+
+watch:
+	npm run watch
