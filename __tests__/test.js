@@ -1,8 +1,18 @@
 import { readFileSync } from 'fs';
+import path from 'path';
 import genDiff from '../src';
 
+const fixtures = [
+  ['before.json', 'after.json', 'result'],
+  ['before.yml', 'after.yml', 'result'],
+];
 
-test('JSON', () => {
-  const expected = readFileSync('__tests__/__fixtures__/result', 'UTF-8');
-  expect(genDiff('__tests__/__fixtures__/before.json', '__tests__/__fixtures__/after.json')).toBe(expected);
-});
+const pathsToFixtures = fixtures.map(
+  arr => arr.map(fileName => path.resolve(__dirname, '__fixtures__', fileName)),
+);
+
+test.each(pathsToFixtures)('generate difference',
+  (beforeFilePath, afterFilePath, expectedFilePath) => {
+    const expected = readFileSync(expectedFilePath, 'UTF-8');
+    expect(genDiff(beforeFilePath, afterFilePath)).toBe(expected);
+  });
