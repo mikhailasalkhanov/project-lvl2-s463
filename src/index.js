@@ -1,12 +1,10 @@
 import { has, union } from 'lodash';
 import { readFileSync } from 'fs';
-import { extname } from 'path';
-import parser from './parsers';
+import parseByPath from './parsers';
 
 const genDiff = (firstPathToFile, secondPathToFile) => {
-  const parseData = parser(extname(firstPathToFile));
-  const firstDataObj = parseData(readFileSync(firstPathToFile, 'UTF-8'));
-  const secondDataObj = parseData(readFileSync(secondPathToFile, 'UTF-8'));
+  const firstDataObj = parseByPath(firstPathToFile)(readFileSync(firstPathToFile, 'UTF-8'));
+  const secondDataObj = parseByPath(secondPathToFile)(readFileSync(secondPathToFile, 'UTF-8'));
   const allKeys = union(Object.keys(firstDataObj), Object.keys(secondDataObj));
 
   const result = allKeys.reduce((acc, key) => {
