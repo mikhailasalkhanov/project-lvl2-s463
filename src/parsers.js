@@ -5,7 +5,7 @@ import { extname } from 'path';
 const formats = {
   '.json': JSON.parse,
   '.yml': yaml.safeLoad,
-  '.ini': ini.parse
+  '.ini': ini.parse,
 };
 
 export default path => formats[extname(path)];
