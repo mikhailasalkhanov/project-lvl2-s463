@@ -1,28 +1,16 @@
-import { has, union } from 'lodash';
 import { readFileSync } from 'fs';
 import parseByPath from './parsers';
+import buildAst from './astBuilder';
+import render from './renderers';
 
 const genDiff = (firstPathToFile, secondPathToFile) => {
-  const firstDataObj = parseByPath(firstPathToFile)(readFileSync(firstPathToFile, 'UTF-8'));
-  const secondDataObj = parseByPath(secondPathToFile)(readFileSync(secondPathToFile, 'UTF-8'));
-  const allKeys = union(Object.keys(firstDataObj), Object.keys(secondDataObj));
+  const dataObj1 = parseByPath(firstPathToFile)(readFileSync(firstPathToFile, 'UTF-8'));
+  const dataObj2 = parseByPath(secondPathToFile)(readFileSync(secondPathToFile, 'UTF-8'));
 
-  const result = allKeys.reduce((acc, key) => {
-    if (
-      has(firstDataObj, key) && has(secondDataObj, key) && firstDataObj[key] === secondDataObj[key]
-    ) {
-      return [...acc, `    ${key}: ${firstDataObj[key]}`];
-    }
-    if (has(firstDataObj, key) && !has(secondDataObj, key)) {
-      return [...acc, `  - ${key}: ${firstDataObj[key]}`];
-    }
-    if (!has(firstDataObj, key) && has(secondDataObj, key)) {
-      return [...acc, `  + ${key}: ${secondDataObj[key]}`];
-    }
-    return [...acc, `  + ${key}: ${secondDataObj[key]}`, `  - ${key}: ${firstDataObj[key]}`];
-  }, []);
+  const tree = buildAst(dataObj1, dataObj2);
+  const diff = render(tree);
 
-  return ['{', ...result, '}'].join('\n');
+  return diff;
 };
 
 export default genDiff;
