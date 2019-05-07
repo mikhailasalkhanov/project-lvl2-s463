@@ -2,7 +2,7 @@ install:
 	npm install
 
 lint:
-	npx eslint .
+	npx eslint --fix .
 
 publish:
 	npm publish
@@ -14,4 +14,4 @@ test:
 	npm run test
 
 watch:
-	npm run watch
+	jest --watch

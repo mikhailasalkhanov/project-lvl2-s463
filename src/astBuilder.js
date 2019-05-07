@@ -10,13 +10,15 @@ const buildAst = (dataObj1, dataObj2) => {
       return [...acc, { name: key, type: 'nested', children: buildAst(valueObj1, valueObj2) }];
     }
     if (_.has(dataObj1, key) && !_.has(dataObj2, key)) {
-      return [...acc, { name: key, type: 'deleted', value: valueObj1 }];
+      return [...acc, { name: key, type: 'removed', oldValue: valueObj1 }];
     }
     if (!_.has(dataObj1, key) && _.has(dataObj2, key)) {
-      return [...acc, { name: key, type: 'added', value: valueObj2 }];
+      return [...acc, { name: key, type: 'added', newValue: valueObj2 }];
     }
     if (valueObj1 !== valueObj2) {
-      return [...acc, { name: key, type: 'deleted', value: valueObj1 }, { name: key, type: 'added', value: valueObj2 }];
+      return [...acc, {
+        name: key, type: 'updated', oldValue: valueObj1, newValue: valueObj2,
+      }];
     }
     return [...acc, { name: key, type: 'unchanged', value: valueObj1 }];
   }, []);

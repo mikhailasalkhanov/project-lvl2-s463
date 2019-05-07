@@ -2,29 +2,28 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import genDiff from '../src';
 
-const testCases = {
-  flat: [
-    ['before.json', 'after.json', 'result.txt'],
-    ['before.yml', 'after.yml', 'result.txt'],
-    ['before.ini', 'after.ini', 'result.txt'],
-  ],
-  nested: [
-    ['nested-before.json', 'nested-after.json', 'nested-result.txt'],
-    ['nested-before.yml', 'nested-after.yml', 'nested-result.txt'],
-    ['nested-before.ini', 'nested-after.ini', 'nested-result.txt'],
-  ],
-};
+const flatSamples = [
+  ['before.json', 'after.json'],
+  ['before.yml', 'after.yml'],
+  ['before.ini', 'after.ini'],
+];
+const nestedSamples = [
+  ['nested-before.json', 'nested-after.json'],
+  ['nested-before.yml', 'nested-after.yml'],
+  ['nested-before.ini', 'nested-after.ini'],
+];
 
-const runTest = (testCase) => {
-  const pathsToTestFiles = testCases[testCase].map(testFiles => testFiles
-    .map(fileName => path.resolve(__dirname, '__fixtures__', fileName)));
 
-  test.each(pathsToTestFiles)(`${testCase} %s`,
+const runTest = (samples, expectedOutput, format = 'defaultFormatter') => {
+  const pathsToTestFiles = samples.map((sample => [...sample, expectedOutput].map(fileName => path.join('__tests__/__fixtures__', fileName))));
+
+  test.each(pathsToTestFiles)(`${expectedOutput} %s`,
     (beforeFilePath, afterFilePath, expectedFilePath) => {
       const expected = readFileSync(expectedFilePath, 'UTF-8');
-      expect(genDiff(beforeFilePath, afterFilePath)).toBe(expected);
+      expect(genDiff(beforeFilePath, afterFilePath, format)).toBe(expected);
     });
 };
 
-runTest('flat');
-runTest('nested');
+runTest(flatSamples, 'result.txt');
+runTest(nestedSamples, 'nested-result.txt');
+runTest(nestedSamples, 'plain-result.txt', 'plain');
