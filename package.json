@@ -1,6 +1,6 @@
 {
   "name": "gendiff-asalkhanov",
-  "version": "2.3.9",
+  "version": "2.4.9",
   "description": "cli app for search differences in config files",
   "main": "index.js",
   "bin": {
