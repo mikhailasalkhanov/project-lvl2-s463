@@ -4,20 +4,13 @@ CLI app for comparing configs.
 Supports `.json, .ini, .yml` files, with grafic, plain and json output formats.
 
 ### Instalation
-``
-npm install -g gendiff-asalkhanov
-``
+    npm install -g gendiff-asalkhanov
 #### Usage
-``
-`gendiff -f [outputFormat] <firstPath> <secondPath>`
-``
-
+    gendiff -f [outputFormat] <firstPath> <secondPath>
 #### Options
-``
-`-f, --format   Default: graphical, optional: plain, json`
-`-v, --version`
-`-h, --help`
-``
+    -f, --format   Default: graphical, optional: plain, json
+	-v, --version
+	-h, --help
 #### Examples
 <a href="https://asciinema.org/a/sNvsyeoDriKDzu5IlnBe0FMyo?autoplay=1" target="_blank"><img src="https://asciinema.org/a/sNvsyeoDriKDzu5IlnBe0FMyo.svg" /></a>
 <a href="https://asciinema.org/a/X0uL8cbyT2FmYfbScqNF67tCn" target="_blank"><img src="https://asciinema.org/a/X0uL8cbyT2FmYfbScqNF67tCn.svg" />
