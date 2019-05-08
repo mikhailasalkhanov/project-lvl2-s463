@@ -1,11 +1,13 @@
 import defaultFormat from './defaultFormatter';
-import plain from './plain';
+import plainFormat from './plain';
+import jsonFormat from './json';
 
-const options = {
-  plain,
+const dispatcher = {
+  plain: plainFormat,
   defaultFormatter: defaultFormat,
+  json: jsonFormat,
 };
 
-const render = (tree, format) => options[format](tree);
+const render = (tree, format) => dispatcher[format](tree);
 
 export default render;
