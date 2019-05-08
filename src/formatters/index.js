@@ -1,6 +1,6 @@
 import defaultFormat from './defaultFormatter';
-import plainFormat from './plain';
-import jsonFormat from './json';
+import plainFormat from './plainFormatter';
+import jsonFormat from './jsonFormatter';
 
 const dispatcher = {
   plain: plainFormat,
