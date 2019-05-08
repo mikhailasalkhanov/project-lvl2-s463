@@ -2,28 +2,25 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import genDiff from '../src';
 
-const flatSamples = [
-  ['before.json', 'after.json'],
-  ['before.yml', 'after.yml'],
-  ['before.ini', 'after.ini'],
-];
-const nestedSamples = [
-  ['nested-before.json', 'nested-after.json'],
-  ['nested-before.yml', 'nested-after.yml'],
-  ['nested-before.ini', 'nested-after.ini'],
-];
+const extensions = ['.json', '.yml', '.ini'];
 
+const getPath = fileName => path.join('__tests__/__fixtures__', fileName);
 
-const runTest = (samples, expectedOutput, format = 'defaultFormatter') => {
-  const pathsToTestFiles = samples.map((sample => [...sample, expectedOutput].map(fileName => path.join('__tests__/__fixtures__', fileName))));
+const runTest = (fileName1, fileName2, expectedFileName, format = 'defaultFormatter') => {
+  const paths = extensions.map(extension => [
+    getPath(`${fileName1}${extension}`),
+    getPath(`${fileName2}${extension}`),
+    getPath(`${expectedFileName}.txt`),
+  ]);
 
-  test.each(pathsToTestFiles)(`${expectedOutput} %s`,
+  test.each(paths)('%s',
     (beforeFilePath, afterFilePath, expectedFilePath) => {
       const expected = readFileSync(expectedFilePath, 'UTF-8');
       expect(genDiff(beforeFilePath, afterFilePath, format)).toBe(expected);
     });
 };
 
-runTest(flatSamples, 'result.txt');
-runTest(nestedSamples, 'nested-result.txt');
-runTest(nestedSamples, 'plain-result.txt', 'plain');
+runTest('before', 'after', 'result');
+runTest('nested-before', 'nested-after', 'nested-result');
+runTest('nested-before', 'nested-after', 'plain-result', 'plain');
+runTest('nested-before', 'nested-after', 'json-result', 'json');
