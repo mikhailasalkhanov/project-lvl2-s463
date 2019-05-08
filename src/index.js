@@ -9,7 +9,7 @@ const genDiff = (firstPathToFile, secondPathToFile, format = 'defaultFormatter')
 
   const tree = buildAst(dataObj1, dataObj2);
   const diff = render(tree, format);
-  console.log(JSON.stringify(tree));
+
   return diff;
 };
 
