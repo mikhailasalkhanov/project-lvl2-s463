@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const stringify = (value, depth) => {
   if (value instanceof Object) {
     const stringifiedValue = Object.keys(value).map(key => `${' '.repeat(depth * 4 + 4)}${key}: ${value[key]}`).join('\n');
@@ -6,25 +8,20 @@ const stringify = (value, depth) => {
   return value;
 };
 
-const options = {
+const dispatcher = {
   unchanged: (node, depth) => `  ${node.name}: ${stringify(node.value, depth)}\n`,
   removed: (node, depth) => `- ${node.name}: ${stringify(node.oldValue, depth)}\n`,
   added: (node, depth) => `+ ${node.name}: ${stringify(node.newValue, depth)}\n`,
   nested: node => `  ${node.name}: {`,
-  updated: (node, depth) => `${options.removed(node, depth)}${' '.repeat(depth * 4 - 2)}${options.added(node, depth)}`,
+  updated: (node, depth) => `${dispatcher.removed(node, depth)}${' '.repeat(depth * 4 - 2)}${dispatcher.added(node, depth)}`,
 };
 
-const render = (ast) => {
-  const iter = (tree, depth = 1) => tree.map((node) => {
-    const formattedString = `${' '.repeat(depth * 4 - 2)}${options[node.type](node, depth)}`;
+const iter = (tree, depth = 1) => tree.reduce((acc, node) => {
+  const formattedString = `${' '.repeat(depth * 4 - 2)}${dispatcher[node.type](node, depth)}`;
+  if (node.type === 'nested') {
+    return [...acc, `${formattedString}\n${_.flatten(iter(node.children, depth + 1)).join('')}${' '.repeat(depth * 4)}}\n`];
+  }
+  return [...acc, formattedString];
+}, []);
 
-    if (node.type === 'nested') {
-      return `${formattedString}\n${iter(node.children, depth + 1)}${' '.repeat(depth * 4)}}\n`;
-    }
-    return formattedString;
-  }).join('');
-
-  return `{\n${iter(ast)}}`;
-};
-
-export default render;
+export default ast => `{\n${_.flatten(iter(ast)).join('')}}`;
