@@ -4,7 +4,7 @@ import { extname } from 'path';
 
 const dispatcher = {
   '.json': JSON.parse,
-  '.yml': data => yaml.safeLoad(data, 'json'),
+  '.yml': yaml.safeLoad,
   '.ini': ini.parse,
 };
 
