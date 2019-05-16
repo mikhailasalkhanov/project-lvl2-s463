@@ -8,17 +8,16 @@ const formatValue = (value) => {
   return value;
 };
 
-const dispatcher = {
-  removed: (node, pathToNode) => `Property '${pathToNode}' was removed`,
-  added: (node, pathToNode) => `Property '${pathToNode}' was added with value: ${formatValue(node.newValue)}`,
-  updated: (node, pathToNode) => `Property '${pathToNode}' was updated. From ${formatValue(node.oldValue)} to ${formatValue(node.newValue)}`,
-};
+const iter = (tree, path = '') => {
+  const dispatcher = {
+    removed: nodePath => `Property '${nodePath}' was removed`,
+    added: (nodePath, node) => `Property '${nodePath}' was added with value: ${formatValue(node.newValue)}`,
+    updated: (nodePath, node) => `Property '${nodePath}' was updated. From ${formatValue(node.oldValue)} to ${formatValue(node.newValue)}`,
+    nested: (nodePath, node) => iter(node.children, `${nodePath}.`),
+  };
 
-const iter = (tree, pathToNode = '') => tree.filter(node => node.type !== 'unchanged').map((node) => {
-  if (node.type === 'nested') {
-    return iter(node.children, `${pathToNode}${node.name}.`);
-  }
-  return dispatcher[node.type](node, `${pathToNode}${node.name}`);
-}).join('\n');
+  const changedNodes = tree.filter(node => node.type !== 'unchanged');
+  return changedNodes.map(node => dispatcher[node.type](`${path}${node.name}`, node)).join('\n');
+};
 
 export default iter;

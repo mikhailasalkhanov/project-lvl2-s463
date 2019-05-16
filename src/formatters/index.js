@@ -1,10 +1,10 @@
-import defaultFormat from './defaultFormatter';
+import visualFormat from './visualFormatter';
 import plainFormat from './plainFormatter';
 import jsonFormat from './jsonFormatter';
 
 const dispatcher = {
   plain: plainFormat,
-  defaultFormatter: defaultFormat,
+  defaultFormatter: visualFormat,
   json: jsonFormat,
 };
 

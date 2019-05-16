@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 const buildAst = (dataObj1, dataObj2) => {
-  const keys = _.union(Object.keys(dataObj1), Object.keys(dataObj2)).sort((a, b) => a - b);
+  const keys = _.union(Object.keys(dataObj1), Object.keys(dataObj2)).sort();
   const ast = keys.reduce((acc, key) => {
     const valueObj1 = dataObj1[key];
     const valueObj2 = dataObj2[key];
