@@ -1,25 +1,27 @@
 import _ from 'lodash';
 
-const indent = spaces => ' '.repeat(spaces);
+const indent = depth => ' '.repeat(depth * 4 - 2);
 
 const stringify = (value, depth) => {
   if (!(value instanceof Object)) {
     return value;
   }
-  const stringifiedValue = Object.keys(value).map(key => `${indent((depth + 1) * 4)}${key}: ${value[key]}`).join('\n');
-  return `{\n${stringifiedValue}\n${indent(depth * 4)}}`;
+  const stringifiedValue = Object.keys(value).map(key => `${indent(depth + 1)}  ${key}: ${value[key]}`).join('\n');
+  return `{\n${stringifiedValue}\n${indent(depth)}  }`;
 };
 
 const iter = (tree, depth = 1) => {
+  const indentation = indent(depth);
+
   const dispatcher = {
-    unchanged: node => `${indent(depth * 4)}${node.name}: ${stringify(node.value, depth)}`,
-    removed: node => `${indent(depth * 4 - 2)}- ${node.name}: ${stringify(node.oldValue, depth)}`,
-    added: node => `${indent(depth * 4 - 2)}+ ${node.name}: ${stringify(node.newValue, depth)}`,
-    updated: node => [dispatcher.removed(node, depth), dispatcher.added(node, depth)],
+    unchanged: node => `${indentation}  ${node.name}: ${stringify(node.value, depth)}`,
+    removed: node => `${indentation}- ${node.name}: ${stringify(node.oldValue, depth)}`,
+    added: node => `${indentation}+ ${node.name}: ${stringify(node.newValue, depth)}`,
+    updated: node => [dispatcher.removed(node), dispatcher.added(node)],
     nested: node => [
-      `${indent(depth * 4)}${node.name}: {`,
+      `${indentation}  ${node.name}: {`,
       iter(node.children, depth + 1),
-      `${indent(depth * 4)}}`,
+      `${indentation}  }`,
     ],
   };
 
